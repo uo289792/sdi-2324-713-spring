@@ -3,7 +3,6 @@ package com.uniovi.sdi2324713spring.services;
 import com.uniovi.sdi2324713spring.repositories.MarksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
 import com.uniovi.sdi2324713spring.entities.Mark;
 
 import java.util.*;

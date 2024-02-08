@@ -3,7 +3,6 @@ package com.uniovi.sdi2324713spring.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.uniovi.sdi2324713spring.entities.Mark;
 import com.uniovi.sdi2324713spring.services.MarksService;
 
@@ -11,8 +10,12 @@ import com.uniovi.sdi2324713spring.services.MarksService;
 @Controller
 public class MarksController {
 
-    @Autowired //Inyectar el servicio
-    private MarksService marksService;
+    //Inyectar el servicio
+    private final MarksService marksService;
+
+    public MarksController(MarksService marksService) {
+        this.marksService = marksService;
+    }
 
     @RequestMapping("/mark/list")
     public String getList(Model model) {
