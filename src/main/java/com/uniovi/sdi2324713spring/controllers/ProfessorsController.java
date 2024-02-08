@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class ProfessorsController {
 
-    @Autowired //Inyectar el servicio
-    private ProfessorsService professorsService;
+    //Inyectar el servicio
+    private final ProfessorsService professorsService;
+
+    public ProfessorsController(ProfessorsService professorsService) {
+        this.professorsService = professorsService;
+    }
 
     @RequestMapping("/professor/list")
     public String getList(Model model) {
