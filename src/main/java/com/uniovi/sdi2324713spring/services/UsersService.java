@@ -25,6 +25,7 @@ public class UsersService {
  public void addUser(User user) {
   usersRepository.save(user);
  }
+ public User getUserByDni(String dni) { return usersRepository.findByDni(dni);}
  public void deleteUser(Long id) {
   usersRepository.deleteById(id);
  }

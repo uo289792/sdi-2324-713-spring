@@ -1,16 +1,23 @@
 package com.uniovi.sdi2324713spring.controllers;
-import org.springframework.beans.factory.annotation.*;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.uniovi.sdi2324713spring.entities.*;
-import com.uniovi.sdi2324713spring.services.UsersService;
+import com.uniovi.sdi2324713spring.services.*;
+
+import org.springframework.security.core.Authentication;
+
 @Controller
 public class UsersController {
     private final UsersService usersService;
-    public UsersController(UsersService usersService) {
+    private final SecurityService securityService;
+    public UsersController(UsersService usersService, SecurityService securityService) {
         this.usersService = usersService;
+        this.securityService = securityService;
     }
+
     @RequestMapping("/user/list")
     public String getListado(Model model) {
         model.addAttribute("usersList", usersService.getUsers());
@@ -46,6 +53,26 @@ public class UsersController {
     public String setEdit(@PathVariable Long id, @ModelAttribute User user) {
         usersService.addUser(user);
         return "redirect:/user/details/" + id;
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signup(@ModelAttribute("user") User user, Model model) {
+        usersService.addUser(user);
+        securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
+        return "redirect:home";
+    }
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
+    public String home(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String dni = auth.getName();
+        User activeUser = usersService.getUserByDni(dni);
+        model.addAttribute("markList", activeUser.getMarks());
+        return "home";
     }
 }
 
