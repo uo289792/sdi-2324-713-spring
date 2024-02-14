@@ -3,7 +3,6 @@ package com.uniovi.sdi2324713spring.services;
 import org.springframework.stereotype.Service;
 import com.uniovi.sdi2324713spring.entities.User;
 import com.uniovi.sdi2324713spring.repositories.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
