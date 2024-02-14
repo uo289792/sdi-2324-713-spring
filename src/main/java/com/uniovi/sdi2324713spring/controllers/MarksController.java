@@ -1,5 +1,6 @@
 package com.uniovi.sdi2324713spring.controllers;
 
+import com.uniovi.sdi2324713spring.services.UsersService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,12 @@ public class MarksController {
 
     //Inyectar el servicio
     private final MarksService marksService;
+    private final UsersService usersService;
 
-    public MarksController(MarksService marksService) {
+    // Inyectamos el servicio por inyección basada en constructor
+    public MarksController(MarksService marksService, UsersService usersService) {
         this.marksService = marksService;
+        this.usersService = usersService;
     }
 
     @RequestMapping("/mark/list")
@@ -41,15 +45,20 @@ public class MarksController {
         return "redirect:/mark/list";
     }
 
-    @RequestMapping(value = "/mark/add")
-    public String getMark() {
+    @RequestMapping(value="/mark/add")
+    public String getMark(Model model){
+        model.addAttribute("usersList", usersService.getUsers());
+        model.addAttribute("usersList", usersService.getUsers());
         return "mark/add";
     }
 
     @RequestMapping(value="/mark/edit/{id}", method=RequestMethod.POST)
     public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id){
-        mark.setId(id);
-        marksService.addMark(mark);
+        Mark originalMark = marksService.getMark(id);
+        // modificar solo score y description
+        originalMark.setScore(mark.getScore());
+        originalMark.setDescription(mark.getDescription());
+        marksService.addMark(originalMark);
         return "redirect:/mark/details/"+id;
     }
 

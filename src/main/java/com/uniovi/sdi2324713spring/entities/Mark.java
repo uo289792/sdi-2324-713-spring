@@ -12,6 +12,10 @@ public class Mark {
 
     private Double score;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Mark() {
     }
 
@@ -19,7 +23,15 @@ public class Mark {
         this.id = id;
         this.description = description;
         this.score = score;
+
     }
+
+    public Mark(String description, Double score, User user) {
+        this.description = description;
+        this.score = score;
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Mark{" + "id=" + id + ", description='" + description + '\'' + ", score=" + score + '}';
@@ -42,6 +54,12 @@ public class Mark {
     }
     public void setScore(Double score) {
         this.score = score;
+    }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 
