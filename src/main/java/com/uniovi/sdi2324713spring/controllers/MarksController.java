@@ -1,8 +1,11 @@
 package com.uniovi.sdi2324713spring.controllers;
 
 import com.uniovi.sdi2324713spring.services.UsersService;
+import com.uniovi.sdi2324713spring.validators.MarksValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.uniovi.sdi2324713spring.entities.Mark;
 import com.uniovi.sdi2324713spring.services.MarksService;
@@ -15,10 +18,13 @@ public class MarksController {
     private final MarksService marksService;
     private final UsersService usersService;
 
+    private final MarksValidator marksValidator;
+
     // Inyectamos el servicio por inyección basada en constructor
-    public MarksController(MarksService marksService, UsersService usersService) {
+    public MarksController(MarksService marksService, UsersService usersService, MarksValidator marksValidator) {
         this.marksService = marksService;
         this.usersService = usersService;
+        this.marksValidator = marksValidator;
     }
 
     @RequestMapping("/mark/list")
@@ -28,9 +34,20 @@ public class MarksController {
     }
 
     @RequestMapping(value = "/mark/add", method = RequestMethod.POST)
-    public String setMark(@ModelAttribute Mark mark) {
+    public String setMark(@Validated Mark mark, BindingResult result) {
+        marksValidator.validate(mark, result);
+        if(result.hasErrors()) {
+            return "/mark/add";
+        }
         marksService.addMark(mark);
         return "redirect:/mark/list";
+    }
+
+    @RequestMapping(value="/mark/add")
+    public String getMark(Model model){
+        model.addAttribute("usersList", usersService.getUsers());
+        model.addAttribute("mark", new Mark());
+        return "mark/add";
     }
 
     @RequestMapping("/mark/details/{id}")
@@ -43,12 +60,6 @@ public class MarksController {
     public String deleteMark(@PathVariable Long id) {
         marksService.deleteMark(id);
         return "redirect:/mark/list";
-    }
-
-    @RequestMapping(value="/mark/add")
-    public String getMark(Model model){
-        model.addAttribute("usersList", usersService.getUsers());
-        return "mark/add";
     }
 
     @RequestMapping(value="/mark/edit/{id}", method=RequestMethod.POST)

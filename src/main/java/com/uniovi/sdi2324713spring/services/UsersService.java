@@ -27,9 +27,18 @@ public class UsersService {
   return usersRepository.findById(id).get();
  }
  public void addUser(User user) {
-  user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+  //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
   usersRepository.save(user);
  }
+
+ public void editUser (Long id,User user) {
+   User originalService = getUser(id);
+   originalService.setDni(user.getDni());
+   originalService.setName(user.getName());
+   originalService.setLastName(user.getLastName());
+   usersRepository.save(originalService);
+ }
+
  public User getUserByDni(String dni) {
   return usersRepository.findByDni(dni);
  }

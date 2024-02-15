@@ -20,12 +20,14 @@ public class User {
     private String role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Mark> marks;
+
     public User(String dni, String name, String lastName) {
       super();
       this.dni = dni;
       this.name = name;
       this.lastName = lastName;
     }
+
     public User() { }
 
     public long getId() { return id; }

@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 public class UsersController {
     private final UsersService usersService;
     private final SecurityService securityService;
-
     private final SignUpFormValidator signUpFormValidator;
 
     public UsersController(UsersService usersService, SecurityService securityService, SignUpFormValidator
@@ -41,6 +40,7 @@ public class UsersController {
         usersService.addUser(user);
         return "redirect:/user/list";
     }
+
     @RequestMapping("/user/details/{id}")
     public String getDetail(Model model, @PathVariable Long id) {
         model.addAttribute("user", usersService.getUser(id));
@@ -59,7 +59,7 @@ public class UsersController {
     }
     @RequestMapping(value = "/user/edit/{id}", method = RequestMethod.POST)
     public String setEdit(@PathVariable Long id, @ModelAttribute User user) {
-        usersService.addUser(user);
+        usersService.editUser(id,user);
         return "redirect:/user/details/" + id;
     }
 
@@ -94,5 +94,12 @@ public class UsersController {
         model.addAttribute("markList", activeUser.getMarks());
         return "home";
     }
+
+    @RequestMapping("/user/list/update")
+    public String updateList(Model model){
+        model.addAttribute("usersList", usersService.getUsers());
+        return "user/list :: usersTable";
+    }
+
 }
 
