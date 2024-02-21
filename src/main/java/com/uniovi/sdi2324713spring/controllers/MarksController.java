@@ -41,15 +41,15 @@ public class MarksController {
     @RequestMapping(value = "/mark/add", method = RequestMethod.POST)
     public String setMark(@Validated Mark mark, BindingResult result) {
         marksValidator.validate(mark, result);
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return "/mark/add";
         }
         marksService.addMark(mark);
         return "redirect:/mark/list";
     }
 
-    @RequestMapping(value="/mark/add")
-    public String getMark(Model model){
+    @RequestMapping(value = "/mark/add")
+    public String getMark(Model model) {
         model.addAttribute("usersList", usersService.getUsers());
         model.addAttribute("mark", new Mark());
         return "mark/add";
@@ -67,14 +67,14 @@ public class MarksController {
         return "redirect:/mark/list";
     }
 
-    @RequestMapping(value="/mark/edit/{id}", method=RequestMethod.POST)
-    public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id){
+    @RequestMapping(value = "/mark/edit/{id}", method = RequestMethod.POST)
+    public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id) {
         Mark originalMark = marksService.getMark(id);
         // modificar solo score y description
         originalMark.setScore(mark.getScore());
         originalMark.setDescription(mark.getDescription());
         marksService.addMark(originalMark);
-        return "redirect:/mark/details/"+id;
+        return "redirect:/mark/details/" + id;
     }
 
     @RequestMapping(value = "/mark/edit/{id}")
@@ -85,12 +85,21 @@ public class MarksController {
     }
 
     @RequestMapping("/mark/list/update")
-    public String updateList(Model model){
-        model.addAttribute("markList", marksService.getMarks() );
+    public String updateList(Model model) {
+        model.addAttribute("markList", marksService.getMarks());
         return "mark/list :: marksTable";
     }
 
-}
+    public String setResendTrue(@PathVariable Long id) {
+        marksService.setMarkResend(true, id);
+        return "redirect:/mark/list";
+    }
 
+    @RequestMapping(value = "/mark/{id}/noresend", method = RequestMethod.GET)
+    public String setResendFalse(@PathVariable Long id) {
+        marksService.setMarkResend(false, id);
+        return "redirect:/mark/list";
+    }
+}
 
 
