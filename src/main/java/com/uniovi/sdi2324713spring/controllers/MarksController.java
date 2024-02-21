@@ -9,6 +9,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.uniovi.sdi2324713spring.entities.Mark;
 import com.uniovi.sdi2324713spring.services.MarksService;
+import java.util.Set;
+import java.util.HashSet;
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -19,16 +22,21 @@ public class MarksController {
     private final UsersService usersService;
 
     private final MarksValidator marksValidator;
+    private final HttpSession httpSession;
 
     // Inyectamos el servicio por inyección basada en constructor
-    public MarksController(MarksService marksService, UsersService usersService, MarksValidator marksValidator) {
+    public MarksController(MarksService marksService, UsersService usersService, MarksValidator marksValidator, HttpSession httpSession) {
         this.marksService = marksService;
         this.usersService = usersService;
         this.marksValidator = marksValidator;
+        this.httpSession = httpSession;
     }
 
     @RequestMapping("/mark/list")
     public String getList(Model model) {
+        Set<Mark> consultedList = (Set<Mark>) (httpSession.getAttribute("consultedList") != null ?
+                httpSession.getAttribute("consultedList") : new HashSet<>());
+        model.addAttribute("consultedList", consultedList);
         model.addAttribute("markList", marksService.getMarks());
         return "mark/list";
     }
