@@ -1,6 +1,5 @@
 package com.uniovi.sdi2324713spring.controllers;
 
-import com.uniovi.sdi2324713spring.entities.User;
 import com.uniovi.sdi2324713spring.services.UsersService;
 import com.uniovi.sdi2324713spring.validators.MarksValidator;
 import org.springframework.stereotype.Controller;
@@ -10,8 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.uniovi.sdi2324713spring.entities.Mark;
 import com.uniovi.sdi2324713spring.services.MarksService;
-
-import java.security.Principal;
 import java.util.Set;
 import java.util.HashSet;
 import javax.servlet.http.HttpSession;
@@ -36,17 +33,8 @@ public class MarksController {
     }
 
     @RequestMapping("/mark/list")
-    public String getList(Model model, Principal principal,
-                    @RequestParam(value = "", required = false) String searchText) {
-        String dni = principal.getName(); // DNI es el name de la autenticación
-        User user = usersService.getUserByDni(dni);
-        if(searchText != null && !searchText.isEmpty()) {
-            model.addAttribute(("marksList",
-                    marksService.searchMarksByDescriptionAndNameForUser(searchText,user)))
-        } else {
-            model.addAttribute("marksList", marksService.getMarksForUser(user));
-        }
-        model.addAttribute("marksList", marksService.getMarksForUser(user));
+    public String getList(Model model) {
+        model.addAttribute("markList", marksService.getMarks());
         return "mark/list";
     }
 
@@ -97,14 +85,11 @@ public class MarksController {
     }
 
     @RequestMapping("/mark/list/update")
-    public String updateList(Model model, Principal principal) {
-        String dni = principal.getName(); // DNI es el name de la autenticación
-        User user = usersService.getUserByDni(dni);
-        model.addAttribute("marksList", marksService.getMarksForUser(user));
+    public String updateList(Model model) {
+        model.addAttribute("markList", marksService.getMarks());
         return "mark/list :: marksTable";
     }
 
-    @RequestMapping(value = "/mark/{id}/resend", method = RequestMethod.GET)
     public String setResendTrue(@PathVariable Long id) {
         marksService.setMarkResend(true, id);
         return "redirect:/mark/list";
