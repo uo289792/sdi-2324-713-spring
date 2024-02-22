@@ -29,9 +29,8 @@ public class MarksService {
         this.httpSession = httpSession;
     }
 
-    public List<Mark> getMarks() {
-        List<Mark> marks = new ArrayList<Mark>();
-        marksRepository.findAll().forEach(marks::add);
+    public Page<Mark> getMarks(Pageable pageable) {
+        Page<Mark> marks = marksRepository.findAll(pageable);
         return marks;
     }
 
@@ -56,6 +55,17 @@ public class MarksService {
         if (mark.getUser().getDni().equals(dni)) {
             marksRepository.updateResend(revised, id);
         }
+    }
+
+    public Page<Mark> getMarksForUser(Pageable pageable, User user) {
+        Page<Mark> marks = new PageImpl<Mark>(new LinkedList<Mark>());
+        if (user.getRole().equals("ROLE_STUDENT")) {
+            marks = marksRepository.findAllByUser(pageable, user);
+        }
+        if (user.getRole().equals("ROLE_PROFESSOR")) {
+            marks = getMarks(pageable);
+        }
+        return marks;
     }
 
     public Page<Mark> searchMarksByDescriptionAndNameForUser(Pageable pageable, String searchText, User user) {
