@@ -24,11 +24,11 @@ public class MarksValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "score", "Error.empty");
 
         if (mark.getDescription().length() < 20) {
-            errors.rejectValue("description", "Error.marks.description.length");
+            errors.rejectValue("description", "Error.mark.description.length");
         }
 
         if (mark.getScore() < 0 || mark.getScore() > 10) {
-            errors.rejectValue("score", "Error.marks.score.range");
+            errors.rejectValue("score", "Error.mark.score.range");
         }
 
     }

@@ -27,7 +27,7 @@ public class ProfessorValidator implements Validator {
 
         if (!Character.isLetter(professor.getDni().charAt(professor.getDni().length() - 1))
                 || professor.getDni().length() != 9) {
-            errors.rejectValue("dni", "Error.professor.dni.length");}
+            errors.rejectValue("dni", "Error.professor.dni.format");}
         if (professorsService.getProfessorByDni(professor.getDni()) != null) {
             errors.rejectValue("dni", "Error.professor.dni.duplicate");}
 
