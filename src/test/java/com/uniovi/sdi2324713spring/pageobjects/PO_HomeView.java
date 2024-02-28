@@ -33,5 +33,4 @@ public class PO_HomeView extends PO_NavView{
         PO_HomeView.checkWelcomeToPage(driver, locale1);
     }
 
-
 }

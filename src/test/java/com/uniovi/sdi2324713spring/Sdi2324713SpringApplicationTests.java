@@ -81,6 +81,4 @@ class Sdi2324713SpringApplicationTests {
                 PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
     }
 
-
-
 }
