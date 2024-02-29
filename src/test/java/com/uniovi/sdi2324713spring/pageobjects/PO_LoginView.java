@@ -18,4 +18,11 @@ public class PO_LoginView extends PO_NavView {
         By boton = By.className("btn");
         driver.findElement(boton).click();
     }
+
+    public static void login(WebDriver driver, String dni, String password, String texto) {
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, dni, password);
+        PO_View.checkElementBy(driver, "text", texto);
+    }
+
 }
